@@ -1,0 +1,50 @@
+﻿#!/usr/bin/env bash
+read -p "Pritisnite [Enter] da bi ste nastavili..."
+read -p 
+echo "Krećemo..."
+sleep 1s
+
+echo "Ažuriranje liste repozitorija..."
+sleep 1s
+apt update
+
+echo "Dodavanje repozitorija..."
+sudo add-apt-repository main
+sudo add-apt-repository universe
+sudo add-apt-repository restricted
+sudo add-apt-repository multiverse
+
+echo "Ažuriranje i nadogradnja..."
+apt update && apt upgrade -y
+
+echo "Instalira se apache2, php i mysql"
+apt install apache2 php mysql-server -y
+
+echo "Instaliranje php ekstenzija..."
+apt install php-zip php-mysql php-mbstring php-curl php-gd -y 
+
+systemctl enable mysql apache2
+
+apt install zip unzip tree -y
+
+echo "Postavi cgi.fix na 0 u php.ini..."
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.2/apache2/php.ini
+
+systemctl restart apache2
+
+echo "Kreiranje phpinfo fajla..."
+echo "<?php phpinfo(); ?>" >> /var/www/html/info.php
+echo "Vasa lamp instalacija je uspesno podesena!" > /var/www/html/index.html
+
+echo "Instaliranje Webmin kontrol panela..."
+echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
+wget http://www.webmin.com/jcameron-key.asc
+apt-key add jcameron-key.asc
+apt update
+apt install webmin
+sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
+/etc/init.d/webmin restart
+rm jcameron-key.asc
+
+
+
