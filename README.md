@@ -10,4 +10,4 @@ chmod +x lamp
 ./lamp
 ```
 
-Licenca: [MIT](../blob/master/LICENSE)
+Licenca: [MIT](/blob/master/LICENSE)
