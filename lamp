@@ -23,6 +23,8 @@ sudo add-apt-repository multiverse
 echo -e ${YELLOW}Ažuriranje i nadogradnja...${NC}
 apt update && apt upgrade -y
 
+apt install software-properties-common apt-transport-https -y
+
 echo -e ${YELLOW}Instalira se apache2, php i mysql${NC}
 apt install apache2 php mysql-server -y
 
