@@ -35,9 +35,10 @@ systemctl enable mysql apache2
 
 apt install zip unzip tree -y
 
-echo -e ${YELLOW}Postavi cgi.fix na 0 u php.ini...${NC}
+echo -e ${YELLOW}Podešavanja php-a...${NC}
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.2/apache2/php.ini
-
+sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/7.2/apache2/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/7.2/apache2/php.ini
 systemctl restart apache2
 
 echo -e ${YELLOW}Kreiranje phpinfo fajla...${NC}
