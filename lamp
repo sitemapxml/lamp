@@ -1,4 +1,4 @@
-﻿#! /usr/bin/env bash
+﻿#!/usr/bin/env bash
 
 # Definicije boja
 RED='\033[0;31m'
