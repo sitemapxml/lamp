@@ -10,4 +10,4 @@ chmod +x lamp
 ./lamp
 ```
 
-Licenca: [https://github.com/sitemapxml/lamp/blob/master/LICENSE](MIT)
+Licenca: [MIT](https://github.com/sitemapxml/lamp/blob/master/LICENSE)
