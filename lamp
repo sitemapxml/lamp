@@ -30,7 +30,7 @@ echo -e ${YELLOW}Instalira se apache2, php i mysql${NC}
 apt install apache2 php mysql-server -y
 
 echo -e ${YELLOW}Instaliranje php ekstenzija...${NC}
-apt install php-zip php-mysql php-mbstring php-curl php-gd php-xml -y 
+apt install php-zip php-mysql php-mbstring php-curl php-gd php-xml php-xmlrpc php-soap php-intl -y 
 
 systemctl enable mysql apache2
 
