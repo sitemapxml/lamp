@@ -21,18 +21,26 @@ read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
 
 while true; do
     read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
-    read -s -p 'Lozinka (ponovo): ' unixpass2
+    read -s -p 'Unesite ponovo da bi ste potvrdili: ' unixpass2
     [ "$unixpass" = "$unixpass2" ] && break
     echo -e ${RED}Molimo pokušajte ponovo.${NC}
 done
 
 echo
 echo $'\033[1;33mPodešavanje lozinke za MYSQL root korinkika\033[0m'
-
 while true; do
     read -s -p 'Unesite lozinku za MYSQL root: ' mysqlrpass
-    read -s -p 'Lozinka (ponovo): ' mysqlrpass2
+    read -s -p 'Unesite ponovo da bi ste potvrdili: ' mysqlrpass2
     [ "$mysqlrpass" = "$mysqlrpass2" ] && break
+    echo -e ${RED}Molimo pokušajte ponovo.${NC}
+done
+
+echo
+echo $'\033[1;33mPodešavanje Email adrese administratora\033[0m'
+while true; do
+    read -p 'Unesite vašu Email adresu: ' email
+    read -p 'Unesite ponovo da bi ste potvrdili: ' email2
+    [ "$email" = "$email2" ] && break
     echo -e ${RED}Molimo pokušajte ponovo.${NC}
 done
 
@@ -76,6 +84,7 @@ echo -e ${YELLOW}Kreiranje phpinfo fajla...${NC}
 echo "<?php phpinfo(); ?>" > /var/www/html/info.php
 echo "Vasa lamp instalacija je uspesno podesena!" > /var/www/html/index.html
 
+# Webmin instalacija
 echo -e ${YELLOW}Instaliranje Webmin kontrol panela...${NC}
 echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
 apt-key add jcameron-key.asc -y
@@ -83,6 +92,59 @@ apt update
 apt install webmin -y
 sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart
+
+# Instalacija Wordpress-a
+while true; do
+    read -p "Da li želite da instalirate Wordpress? (Da/Ne): " dn
+    case $dn in
+        [Dd]* )
+		
+		# Instaliranje faljova
+		wget https://sr.wordpress.org/latest-sr_RS.tar.gz
+		tar -xzvf latest-sr_RS.tar.gz
+		rm -rf /var/www/html
+		mv wordpress /var/www
+		mv /var/www/wordpress /var/www/$hostname
+		chown www-data:www-data -R /var/www/$hostname
+		
+		#podešavanje veb servera
+		cp vhost.conf /etc/apache2/sites-enabled/$hostname.conf
+		sed -i 's/	ServerName default/	ServerName $hostname/g' /etc/apache2/sites-enabled/$hostname.conf
+		sed -i 's/	DocumentRoot /var/www/html/	DocumentRoot /var/www/$hostname/g' /etc/apache2/sites-enabled/$hostname.conf
+		sed -i 's/<Directory /var/www/html>/<Directory /var/www/$hostname>/g' /etc/apache2/sites-enabled/$hostname.conf
+		
+		systemctl restart apache2
+		
+echo "Wordpress je instaliran!";
+break;;
+        [Nn]* ) exit;;
+        * ) echo -e ${RED}Molimo vas da odgovorite sa Da ili Ne.${NC};;
+    esac
+done
+
+# Instalacija SSL sertifikata
+while true; do
+    read -p "Da li želite da instalirate SSL sertifikat? (Da/Ne): " dn
+    case $dn in
+        [Dd]* )
+		
+		# Certbot instalacija
+		add-apt-repository ppa:certbot/certbot
+		apt update
+		apt install python-certbot-apache -y
+
+		# Instalacija Let's encrypt SSL sertifikata
+		certbot --apache --non-interactive --agree-tos --domains $hostname --email webmaster@example.com
+		
+		# Podešavanje Webmin-a
+		sed -i 's/keyfile=/etc/webmin/miniserv.pem/keyfile=/etc/letsencrypt/live/$hostname/privkey.pem/g' /etc/webmin/miniserv.conf
+		
+echo "SSL je instaliran!";
+break;;
+        [Nn]* ) exit;;
+        * ) echo -e ${RED}Molimo vas da odgovorite sa Da ili Ne.${NC};;
+    esac
+done
 
 
 
