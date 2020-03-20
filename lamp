@@ -56,8 +56,6 @@ apt update
 echo -e ${YELLOW}Dodavanje repozitorija...${NC}
 sudo add-apt-repository main
 sudo add-apt-repository universe
-sudo add-apt-repository restricted
-sudo add-apt-repository multiverse
 
 echo -e ${YELLOW}Ažuriranje i nadogradnja...${NC}
 apt update && apt upgrade -y
