@@ -21,18 +21,24 @@ read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
 
 while true; do
     read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
+	echo
     read -s -p 'Unesite ponovo da bi ste potvrdili: ' unixpass2
+	echo
     [ "$unixpass" = "$unixpass2" ] && break
     echo -e ${RED}Molimo pokušajte ponovo.${NC}
+	echo
 done
 
 echo
 echo $'\033[1;33mPodešavanje lozinke za MYSQL root korinkika\033[0m'
 while true; do
     read -s -p 'Unesite lozinku za MYSQL root: ' mysqlrpass
+	echo
     read -s -p 'Unesite ponovo da bi ste potvrdili: ' mysqlrpass2
+	echo
     [ "$mysqlrpass" = "$mysqlrpass2" ] && break
     echo -e ${RED}Molimo pokušajte ponovo.${NC}
+	echo
 done
 
 echo
@@ -42,6 +48,7 @@ while true; do
     read -p 'Unesite ponovo da bi ste potvrdili: ' email2
     [ "$email" = "$email2" ] && break
     echo -e ${RED}Molimo pokušajte ponovo.${NC}
+	echo
 done
 
 # Početak instalacije
