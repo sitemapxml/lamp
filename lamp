@@ -133,7 +133,7 @@ while true; do
         [Dd]* )
 		
 		# Certbot instalacija
-		add-apt-repository ppa:certbot/certbot
+		add-apt-repository ppa:certbot/certbot -y
 		apt update
 		apt install python-certbot-apache -y
 
