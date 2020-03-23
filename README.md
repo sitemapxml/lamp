@@ -1,4 +1,4 @@
-# lamp-instalacija
+# Skripta za konfigurisanje Ubuntu servera
 Skripta za konfigurisanje servera
 
 # Instalacija
