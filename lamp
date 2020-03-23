@@ -64,9 +64,7 @@ apt update
 echo -e ${YELLOW}Dodavanje repozitorija...${NC}
 sudo add-apt-repository main
 sudo add-apt-repository universe
-
-echo -e ${YELLOW}Ažuriranje i nadogradnja...${NC}
-apt update && apt upgrade -y
+apt update -y
 
 apt install software-properties-common apt-transport-https -y
 
