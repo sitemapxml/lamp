@@ -93,17 +93,19 @@ echo "Vasa lamp instalacija je uspesno podesena!" > /var/www/html/index.html
 # Webmin instalacija
 echo -e ${YELLOW}Instaliranje Webmin kontrol panela...${NC}
 echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
-apt-key add jcameron-key.asc -y
+apt-key add jcameron-key.asc
 apt update
-apt install webmin -y
+apt --yes install webmin
 sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart
 
 #podešavanje veb servera
-cp vhost.conf /etc/apache2/sites-enabled/$hostname.conf
-sed -i 's/	ServerName default/	ServerName $hostname/g' /etc/apache2/sites-enabled/$hostname.conf
-sed -i 's/	DocumentRoot /var/www/html/	DocumentRoot /var/www/$hostname/g' /etc/apache2/sites-enabled/$hostname.conf
-sed -i 's/<Directory /var/www/html>/<Directory /var/www/$hostname>/g' /etc/apache2/sites-enabled/$hostname.conf
+cp vhost.conf /etc/apache2/sites-available/$hostname.conf
+sed -i 's/	ServerName default/	ServerName $hostname/g' /etc/apache2/sites-available/$hostname.conf
+sed -i 's/	DocumentRoot /var/www/html/	DocumentRoot /var/www/$hostname/g' /etc/apache2/sites-available/$hostname.conf
+sed -i 's/<Directory /var/www/html>/<Directory /var/www/$hostname>/g' /etc/apache2/sites-available/$hostname.conf
+a2ensite $hostname
+systemctl restart apache2
 
 # Instalacija Wordpress-a
 while true; do
