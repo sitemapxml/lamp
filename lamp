@@ -84,6 +84,8 @@ echo -e ${YELLOW}Podešavanja php-a...${NC}
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.2/apache2/php.ini
 sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/7.2/apache2/php.ini
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/7.2/apache2/php.ini
+
+sed -i 's/ServerTokens OS/ServerTokens Prod/g' /etc/apache2/conf-available/security.conf
 systemctl restart apache2
 
 echo -e ${YELLOW}Kreiranje phpinfo fajla...${NC}
@@ -117,7 +119,9 @@ while true; do
 		wget https://sr.wordpress.org/latest-sr_RS.tar.gz
 		tar -xzvf latest-sr_RS.tar.gz
 		rm -rf /var/www/html
-		mv wordpress /var/www
+		mkdir /var/www/$hostname
+		mv wordpress /var/www/$hostname/html
+		
 		mv /var/www/wordpress /var/www/$hostname
 		chown www-data:www-data -R /var/www/$hostname
 		
