@@ -120,7 +120,7 @@ while true; do
 		chown www-data:www-data -R /var/www/$hostname
 		
 		# Instaliranje dodatnih php ekstenzija
-		apt install php-xmlrpc php-exif
+		apt install php-xmlrpc php-exif -y
 		systemctl restart apache2
 		
 echo "Wordpress je instaliran!";
