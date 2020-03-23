@@ -62,8 +62,8 @@ sleep 1s
 apt update
 
 echo -e ${YELLOW}Dodavanje repozitorija...${NC}
-sudo add-apt-repository main
-sudo add-apt-repository universe
+add-apt-repository main
+add-apt-repository universe
 apt update
 
 apt install software-properties-common apt-transport-https -y
