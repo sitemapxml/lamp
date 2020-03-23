@@ -74,7 +74,7 @@ echo -e ${YELLOW}Instalira se apache2, php i mysql${NC}
 apt install apache2 php mysql-server -y
 
 echo -e ${YELLOW}Instaliranje php ekstenzija...${NC}
-apt install php-zip php-mysql php-mbstring php-curl php-gd php-xml php-xmlrpc php-soap php-intl -y 
+apt install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y 
 
 systemctl enable mysql apache2
 
@@ -119,6 +119,8 @@ while true; do
 		mv /var/www/wordpress /var/www/$hostname
 		chown www-data:www-data -R /var/www/$hostname
 		
+		# Instaliranje dodatnih php ekstenzija
+		apt install php-xmlrpc php-exif
 		systemctl restart apache2
 		
 echo "Wordpress je instaliran!";
