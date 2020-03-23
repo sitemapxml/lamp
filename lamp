@@ -140,7 +140,7 @@ while true; do
 		apt install python-certbot-apache -y
 
 		# Instalacija Let's encrypt SSL sertifikata
-		certbot --apache --non-interactive --agree-tos --domains $hostname --email webmaster@example.com
+		certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
 		
 		# Podešavanje Webmin-a
 		sed -i 's/keyfile=/etc/webmin/miniserv.pem/keyfile=/etc/letsencrypt/live/$hostname/privkey.pem/g' /etc/webmin/miniserv.conf
