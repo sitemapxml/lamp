@@ -103,9 +103,10 @@ sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 
 #podešavanje veb servera
 cp vhost.conf /etc/apache2/sites-available/$hostname.conf
-sed -i 's/	ServerName default/	ServerName $hostname/g' /etc/apache2/sites-available/$hostname.conf
-sed -i 's/	DocumentRoot /var/www/html/	DocumentRoot /var/www/$hostname/g' /etc/apache2/sites-available/$hostname.conf
-sed -i 's/<Directory /var/www/html>/<Directory /var/www/$hostname>/g' /etc/apache2/sites-available/$hostname.conf
+sed -i "s/	ServerName default/	ServerName $hostname/g" /etc/apache2/sites-available/$hostname.conf
+sed -i "s/	DocumentRoot /var/www/html/	DocumentRoot /var/www/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+sed -i "s/<Directory /var/www/html>/<Directory /var/www/$hostname>/g" /etc/apache2/sites-available/$hostname.conf
+a2dissite 000-default
 a2ensite $hostname
 systemctl restart apache2
 
@@ -151,7 +152,7 @@ while true; do
 		certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
 		
 		# Podešavanje Webmin-a
-		sed -i 's/keyfile=/etc/webmin/miniserv.pem/keyfile=/etc/letsencrypt/live/$hostname/privkey.pem/g' /etc/webmin/miniserv.conf
+#		sed -i "s/keyfile=/etc/webmin/miniserv.pem/keyfile=/etc/letsencrypt/live/$hostname/privkey.pem/g" /etc/webmin/miniserv.conf
 		
 echo "SSL je instaliran!";
 break;;
