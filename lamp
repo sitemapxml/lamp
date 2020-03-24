@@ -124,11 +124,14 @@ while true; do
 		mv wordpress /var/www/$hostname/html
 		
 		mv /var/www/wordpress /var/www/$hostname
-		chown www-data:www-data -R /var/www/$hostname
+		chown www-data:www-data -R /var/www/$hostname/html
 		
 		# Instaliranje dodatnih php ekstenzija
 		apt install php-xmlrpc php-exif -y
 		systemctl restart apache2
+		
+		# Brisanje nepotrebnih fajlova
+		rm latest-sr_RS.tar.gz
 		
 echo "Wordpress je instaliran!";
 break;;
