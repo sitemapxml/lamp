@@ -101,11 +101,14 @@ apt --yes install webmin
 sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart
 
-#podešavanje veb servera
+# Podešavanje veb servera
+rm -rf /var/www/html
+mkdir /var/www/$hostname
+#mkdir /var/www/$hostname/html
 cp vhost.conf /etc/apache2/sites-available/$hostname.conf
 sed -i "s/	ServerName default/	ServerName $hostname/g" /etc/apache2/sites-available/$hostname.conf
 sed -i "s/	DocumentRoot /var/www/html/	DocumentRoot /var/www/$hostname/g" /etc/apache2/sites-available/$hostname.conf
-sed -i "s/<Directory /var/www/html>/<Directory /var/www/$hostname>/g" /etc/apache2/sites-available/$hostname.conf
+sed -i "s/<Directory /var/www/html>/<Directory /var/www/$hostname/html>/g" /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
 a2ensite $hostname
 systemctl restart apache2
@@ -119,11 +122,9 @@ while true; do
 		# Instaliranje faljova
 		wget https://sr.wordpress.org/latest-sr_RS.tar.gz
 		tar -xzvf latest-sr_RS.tar.gz
-		rm -rf /var/www/html
-		mkdir /var/www/$hostname
 		mv wordpress /var/www/$hostname/html
 		
-		mv /var/www/wordpress /var/www/$hostname
+		#mv /var/www/wordpress /var/www/$hostname
 		chown www-data:www-data -R /var/www/$hostname/html
 		
 		# Instaliranje dodatnih php ekstenzija
