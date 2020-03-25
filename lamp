@@ -90,24 +90,24 @@ sleep 1s
 
 echo -e ${YELLOW}'Ažuriranje liste repozitorija...'${NC}
 sleep 1s
-apt update
+apt-get update
 
 echo -e ${YELLOW}'Dodavanje repozitorija...'${NC}
 add-apt-repository main
 add-apt-repository universe
-apt update
+apt-get update
 
-apt install software-properties-common apt-transport-https -y
+apt-get install software-properties-common apt-transport-https -y
 
 echo -e ${YELLOW}'Instalira se apache2, php i mysql'${NC}
-apt install apache2 php mysql-server -y
+apt-get install apache2 php mysql-server -y
 
 echo -e ${YELLOW}'Instaliranje php ekstenzija...'${NC}
-apt install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y 
+apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y 
 
 systemctl enable mysql apache2
 
-apt install zip unzip tree -y
+apt-get install zip unzip tree -y
 
 # Osnovna podešavanja php-a, ServerTokens
 echo -e ${YELLOW}'Konfigurisanje php-a...'${NC}
@@ -121,8 +121,8 @@ systemctl restart apache2
 echo -e ${YELLOW}'Instaliranje Webmin kontrolne table...'${NC}
 echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
 apt-key add jcameron-key.asc
-apt update
-apt --yes install webmin
+apt-get update
+apt-get --yes install webmin
 sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart
 
@@ -171,7 +171,7 @@ while true
 			chown www-data:www-data -R /var/www/$hostname/html
 
 			# Instaliranje dodatnih php ekstenzija
-			apt install php-xmlrpc php-exif -y
+			apt-get install php-xmlrpc php-exif -y
 			systemctl restart apache2
 
 			# Brisanje nepotrebnih fajlova
@@ -201,8 +201,8 @@ while true
 		[dD][aA]|[dD])
 			# Certbot instalacija
 			add-apt-repository ppa:certbot/certbot -y
-			apt update
-			apt install python-certbot-apache -y
+			apt-get update
+			apt-get install python-certbot-apache -y
 
 			# Instalacija Let's encrypt SSL sertifikata
 			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
