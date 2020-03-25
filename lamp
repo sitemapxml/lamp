@@ -106,9 +106,8 @@ rm -rf /var/www/html
 mkdir /var/www/$hostname
 #mkdir /var/www/$hostname/html
 cp vhost.conf /etc/apache2/sites-available/$hostname.conf
-sed -i "s/	ServerName default/	ServerName $hostname/g" /etc/apache2/sites-available/$hostname.conf
-sed -i "s/	DocumentRoot /var/www/html/	DocumentRoot /var/www/$hostname/g" /etc/apache2/sites-available/$hostname.conf
-sed -i "s/<Directory /var/www/html>/<Directory /var/www/$hostname/html>/g" /etc/apache2/sites-available/$hostname.conf
+sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+sed -i "s/dir_default/$hostname"/g /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
 a2ensite $hostname
 systemctl restart apache2
