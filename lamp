@@ -233,6 +233,7 @@ while true
 				[dD][aA]|[dD])
 				echo 'Kopiranje lozinki...'
 				echo -e 'UNIX User:' $unixuser'\n''UNIX Password:' $unixpass'\n''Hostname:' $hostname > podaci.txt
+				chmod 0000 podaci.txt
 				echo 'Lozinke su iskopirane.'
 				break
 				;;
