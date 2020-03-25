@@ -8,6 +8,35 @@ YELLOW='\033[1;33m'
 # Reset boja - No Color
 NC='\033[0m' 
 
+# Poruka dobrodošlice!
+text=''
+text+="${GREEN}**********************************************\n"
+text+="Dobro došli u LAMP skriptu za instalaciju!\n"
+text+="Sledeći programi će biti instalirani:\n"
+text+="   - apache2 veb server\n"
+text+="   - mysql 5.6\n"
+text+="   - php 7.2\n"
+text+="PHP ekstenzije:\n"
+text+="   php-zip php-mysql php-mbstring php-curl\n"
+text+="   php-gd php-xml php-xmlrpc php-soap php-intl\n"
+text+="Kontrolna tabla:\n"
+text+="   Webmin - poslednja verzija\n"
+
+text+="Sitni pomoćni programi:\n"
+text+="   zip unzip tree\n"
+text+="Dodatna podešavanja php-a:\n"
+text+="   cgi.fix_pathinfo=0\n"
+text+="   post_max_size = 280M\n"
+text+="   upload_max_filesize = 256M\n"
+text+="NAPOMENE:\n"
+text+="   Biće napravljen virtualhost fajl sa osnovnim\n"
+text+="podešavanjima domena. U toku instalacije imaćete\n"
+text+="mogućnost da odaberete instalaciju Wordpress-a\n"
+text+="u suprotnom biće kreiran probni index.html\n"
+text+="i info.php fajl za proveru ispravnosti instalacije.\n"
+text+="**********************************************\n${NC}"
+printf "%b" "$text"
+
 # Unos neophodnih podataka
 echo -e ${YELLOW}'Molimo vas da unesete osnovne podatke o infra-strukturi: '${NC}
 
