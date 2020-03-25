@@ -137,100 +137,124 @@ a2ensite $hostname
 systemctl restart apache2
 
 # 6g zaštitni zid
-while true; do
-    read -p 'Da li želite da omogućite 6g zaštitni zid? (Da/Ne): ' dn
-    case $dn in
-        [Dd]* )
-		cp 6g.conf /etc/apache2/6g.conf
-		sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
-		systemctl restart apache2
-echo "Zaštitni zid je omogućen!"
-break;;
-        [Nn]* ) exit;;
-        * ) echo -e ${RED}Molimo vas da odgovorite sa Da ili Ne.${NC};;
-    esac
+while true
+	do
+	read -p 'Da li želite da omogućite 6g zaštitni zid? (Da/Ne): ' apache_firewall
+		case $apache_firewall in
+		[dD][aA]|[dD])
+			cp 6g.conf /etc/apache2/6g.conf
+			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
+			systemctl restart apache2
+			echo 'Zaštitni zid je omogućen!'
+		break
+		;;
+		[nN][eE]|[nN])
+			echo 'Preskače se...'
+	break
+	;;
+	*)
+	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
 done
 
 # Instalacija Wordpress-a
-while true; do
-    read -p 'Da li želite da instalirate Wordpress? (Da/Ne): ' dn
-    case $dn in
-        [Dd]* )
+while true
+	do
+	read -p 'Da li želite da instalirate Wordpress? (Da/Ne): ' wp_install
+		case $wp_install in
+		[dD][aA]|[dD])
+			# Instaliranje faljova
+			wget https://sr.wordpress.org/latest-sr_RS.tar.gz
+			tar -xzvf latest-sr_RS.tar.gz
+			mv wordpress /var/www/$hostname/html
+			chown www-data:www-data -R /var/www/$hostname/html
 
-		# Instaliranje faljova
-		wget https://sr.wordpress.org/latest-sr_RS.tar.gz
-		tar -xzvf latest-sr_RS.tar.gz
-		mv wordpress /var/www/$hostname/html
-		chown www-data:www-data -R /var/www/$hostname/html
+			# Instaliranje dodatnih php ekstenzija
+			apt install php-xmlrpc php-exif -y
+			systemctl restart apache2
 
-		# Instaliranje dodatnih php ekstenzija
-		apt install php-xmlrpc php-exif -y
-		systemctl restart apache2
-
-		# Brisanje nepotrebnih fajlova
-		rm latest-sr_RS.tar.gz
-
-echo 'Wordpress je instaliran!'
-break;;
-        [Nn]* )
-
-		# Iskopiraj index.html u webroot
-		mkdir /var/www/$hostname/html
-		cp index.html /var/www/$hostname/html/index.html
-		echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
-
-echo 'Podešen je index.html i phpinfo fajl.'
-exit;;
-        * ) echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC};;
-    esac
+			# Brisanje nepotrebnih fajlova
+			rm latest-sr_RS.tar.gz
+			echo 'Wordpress je instaliran!'
+		break
+		;;
+		[nN][eE]|[nN])
+			# Iskopiraj index.html u webroot
+			mkdir /var/www/$hostname/html
+			cp index.html /var/www/$hostname/html/index.html
+			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
+			echo 'Podešeni su index.html i phpinfo fajl.'
+	break
+	;;
+	*)
+	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
 done
 
 # Instalacija SSL sertifikata
-while true; do
-    read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' dn
-    case $dn in
-        [Dd]* )
+while true
+	do
+	read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' ssl_install
+		case $ssl_install in
+		[dD][aA]|[dD])
+			# Certbot instalacija
+			add-apt-repository ppa:certbot/certbot -y
+			apt update
+			apt install python-certbot-apache -y
 
-		# Certbot instalacija
-		add-apt-repository ppa:certbot/certbot -y
-		apt update
-		apt install python-certbot-apache -y
-
-		# Instalacija Let's encrypt SSL sertifikata
-		certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
-
-echo 'SSL je instaliran!'
-break;;
-        [Nn]* ) exit;;
-        * ) echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC};;
-    esac
+			# Instalacija Let's encrypt SSL sertifikata
+			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
+			echo 'SSL je instaliran!'
+		break
+		;;
+		[nN][eE]|[nN])
+			echo 'Preskače se...'
+	break
+	;;
+	*)
+	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
 done
 
 # Kreiranje fajla sa lozinkama
-while true; do
-    read -p 'Da li želite da napravite rezervnu kopiju korisničkih imena i lozinki? (Da/Ne): ' dn
-    case $dn in
-        [Dd]* )
-		while true; do
+while true
+	do
+	read -r -p 'Da li želite da napravite rezervnu kopiju korisničkih imena i lozinki? (Da/Ne): ' backup_file
+		case $backup_file in
+		[dD][aA]|[dD])
+		while true
+			do
 			echo -e ${RED}'Ova opcija nije bezbedna. Savetujemo vam da fajl iskopirate na sigurno mesto i da ga u što kraćem roku obrišete sa servera.'${NC}
-			read -p 'Da li ste sigurni da želite da nastavite? (Da/Ne): ' dn
-			case $dn in
-				[Dd]* )
+			read -p 'Da li ste sigurni da želite da nastavite? (Da/Ne): ' backup_file_confirm
+				case $backup_file_confirm in
+				[dD][aA]|[dD])
 				echo 'Kopiranje lozinki...'
 				echo -e 'UNIX User:' $unixuser'\n''UNIX Password:' $unixpass'\n''Hostname:' $hostname > podaci.txt
-		echo 'Lozinke su iskopirane.'
-		break;;
-				[Nn]* )
-		echo 'Lozinke nisu iskopirane.'
-		exit;;
-				* ) echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC};;
+				echo 'Lozinke su iskopirane.'
+				break
+				;;
+				[nN][eE]|[nN])
+				echo 'Preskače se...'
+				break
+				;;
+			*)
+			echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+			;;
 			esac
 		done
-break;;
-        [Nn]* )
-exit;;
-        * ) echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC};;
-    esac
+		break
+		;;
+		[nN][eE]|[nN])
+		echo 'Preskače se...'
+		break
+		;;
+	*)
+	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
 done
 
 echo -e ${GREEN}'Instalacija je završena!'${NC}
