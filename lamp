@@ -173,12 +173,12 @@ while true; do
 echo 'Wordpress je instaliran!'
 break;;
         [Nn]* )
-		
+
 		# Iskopiraj index.html u webroot
 		mkdir /var/www/$hostname/html
 		cp index.html /var/www/$hostname/html/index.html
 		echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
-		
+
 echo 'Podešen je index.html i phpinfo fajl.'
 exit;;
         * ) echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC};;
