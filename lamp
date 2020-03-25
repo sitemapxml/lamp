@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Definicije boja
 RED='\033[0;31m'
@@ -107,10 +107,25 @@ mkdir /var/www/$hostname
 #mkdir /var/www/$hostname/html
 cp vhost.conf /etc/apache2/sites-available/$hostname.conf
 sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
-sed -i "s/dir_default/$hostname"/g /etc/apache2/sites-available/$hostname.conf
+sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
 a2ensite $hostname
 systemctl restart apache2
+
+# 6g zaštitni zid
+while true; do
+    read -p "Da li želite da omogućite 6g zaštitni zid? (Da/Ne): " dn
+    case $dn in
+        [Dd]* )
+		cp 6g.conf /etc/apache2/6g.conf
+		sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
+		systemctl restart apache2
+echo "Zaštitni zid je omogućen!";
+break;;
+        [Nn]* ) exit;;
+        * ) echo -e ${RED}Molimo vas da odgovorite sa Da ili Ne.${NC};;
+    esac
+done
 
 # Instalacija Wordpress-a
 while true; do
@@ -153,9 +168,6 @@ while true; do
 
 		# Instalacija Let's encrypt SSL sertifikata
 		certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
-		
-		# Podešavanje Webmin-a
-#		sed -i "s/keyfile=/etc/webmin/miniserv.pem/keyfile=/etc/letsencrypt/live/$hostname/privkey.pem/g" /etc/webmin/miniserv.conf
 		
 echo "SSL je instaliran!";
 break;;
