@@ -206,6 +206,11 @@ while true
 
 			# Instalacija Let's encrypt SSL sertifikata
 			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
+
+			# Putanje do instaliranih SSL sertifikata
+			echo -e "\nPodaci o SSL sertifikatima:" >> sslinfo.txt
+			certbot certificates >> sslinfo.txt
+			chmod 0400 sslinfo.txt
 			echo 'SSL je instaliran!'
 		break
 		;;
@@ -233,6 +238,11 @@ while true
 				[dD][aA]|[dD])
 				echo 'Kopiranje lozinki...'
 				echo -e 'UNIX User:' $unixuser'\n''UNIX Password:' $unixpass'\n''Hostname:' $hostname > podaci.txt
+				echo '*************************************************************************************' >> podaci.txt
+				echo 'VAŽNA NAPOMENA: U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH APLIKACIJA NA NJEMU.' >> podaci.txt
+				echo 'PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ FAJL OBRIŠETE ŠTO PRE.' >> podaci.txt
+				echo 'PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A"' >> podaci.txt
+				echo '*************************************************************************************' >> podaci.txt
 				chmod 0000 podaci.txt
 				echo 'Lozinke su iskopirane.'
 				break
