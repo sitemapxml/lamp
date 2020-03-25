@@ -10,7 +10,7 @@ NC='\033[0m'
 
 # Poruka dobrodošlice!
 text=''
-text+="${GREEN}**********************************************\n"
+text+="${GREEN}*************************************************\n"
 text+="Dobro došli u LAMP skriptu za instalaciju!\n"
 text+="Sledeći programi će biti instalirani:\n"
 text+="   - apache2 veb server\n"
@@ -34,7 +34,7 @@ text+="podešavanjima domena. U toku instalacije imaćete\n"
 text+="mogućnost da odaberete instalaciju Wordpress-a\n"
 text+="u suprotnom biće kreiran probni index.html\n"
 text+="i info.php fajl za proveru ispravnosti instalacije.\n"
-text+="**********************************************\n${NC}"
+text+="***************************************************\n${NC}"
 printf "%b" "$text"
 
 # Unos neophodnih podataka
