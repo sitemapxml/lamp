@@ -1,5 +1,12 @@
 #!/bin/bash
-# https://github.com/sitemapxml/lamp
+
+#############################################
+# https://github.com/sitemapxml/lamp        #
+# Autor: https://github.com/sitemapxml      #
+# Licenca: MIT                              #
+# Datum prvog objavljivanja: Dec 25, 2019.  #
+# Verzija: 0.9.2-alpha2                     #
+#############################################
 
 # Definicije boja
 RED='\033[0;31m'
@@ -22,7 +29,6 @@ text+="   php-zip php-mysql php-mbstring php-curl\n"
 text+="   php-gd php-xml php-xmlrpc php-soap php-intl\n"
 text+="Kontrolna tabla:\n"
 text+="   Webmin - poslednja verzija\n"
-
 text+="Sitni pomoćni programi:\n"
 text+="   zip unzip tree\n"
 text+="Dodatna podešavanja php-a:\n"
@@ -89,10 +95,12 @@ read -p $'\033[1;33mPritisnite [Enter] da bi ste nastavili...\033[0m'
 echo 'Krećemo...'
 sleep 1s
 
+# Ažuriranje liste repozitorija, nadogradnja se preporučuje na kraju
 echo -e ${YELLOW}'Ažuriranje liste repozitorija...'${NC}
 sleep 1s
 apt-get update
 
+# Dodavanje main repozitorije za slučaj da nije dodata, dodavanje universe repozitorije
 echo -e ${YELLOW}'Dodavanje repozitorija...'${NC}
 add-apt-repository main
 add-apt-repository universe
@@ -100,14 +108,12 @@ apt-get update
 
 apt-get install software-properties-common apt-transport-https -y
 
+# Instalacija php i mysql, php ekstenzije, sitni pomoćni programi zip, unzip i tree
 echo -e ${YELLOW}'Instalira se apache2, php i mysql'${NC}
 apt-get install apache2 php mysql-server -y
-
 echo -e ${YELLOW}'Instaliranje php ekstenzija...'${NC}
 apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y 
-
 systemctl enable mysql apache2
-
 apt-get install zip unzip tree -y
 
 # Osnovna podešavanja php-a, ServerTokens
@@ -136,6 +142,12 @@ sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
 a2ensite $hostname
 systemctl restart apache2
+
+# Dodavanje UNIX korisnika
+adduser $unixuser --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
+echo -e "$unixuser:$unixpass" | sudo chpasswd
+echo "$unixuser ALL=(ALL:ALL) ALL" | sudo EDITOR='tee -a' visudo
+echo -e ${GREEN}"Korisnik $unixuser je kreiran."${NC}
 
 # 6g zaštitni zid
 while true
