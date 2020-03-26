@@ -6,7 +6,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 
 # Reset boja - No Color
-NC='\033[0m' 
+NC='\033[0m'
 
 # Poruka dobrodošlice!
 text=''
@@ -61,7 +61,7 @@ while true; do
 done
 
 echo
-echo $'\033[1;33mPodešavanje lozinke za MYSQL root korinkika\033[0m'
+echo -e ${YELLOW}'Podešavanje lozinke za MYSQL root korisnika'${NC}
 while true; do
     read -s -p 'Unesite lozinku za MYSQL root: ' mysqlrpass
 	echo
@@ -145,7 +145,7 @@ while true
 			cp 6g.conf /etc/apache2/6g.conf
 			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
 			systemctl restart apache2
-			echo 'Zaštitni zid je omogućen!'
+			echo -e ${GREEN}'Zaštitni zid je omogućen!'${NC}
 		break
 		;;
 		[nN][eE]|[nN])
@@ -176,7 +176,7 @@ while true
 
 			# Brisanje nepotrebnih fajlova
 			rm latest-sr_RS.tar.gz
-			echo 'Wordpress je instaliran!'
+			echo -e ${GREEN}'Wordpress je instaliran!'${NC}
 		break
 		;;
 		[nN][eE]|[nN])
@@ -199,6 +199,8 @@ while true
 	read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' ssl_install
 		case $ssl_install in
 		[dD][aA]|[dD])
+			echo 'Instalira se SSL...'
+			sleep 1s
 			# Certbot instalacija
 			add-apt-repository ppa:certbot/certbot -y
 			apt-get update
@@ -208,10 +210,10 @@ while true
 			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
 
 			# Putanje do instaliranih SSL sertifikata
-			echo -e "\nPodaci o SSL sertifikatima:" >> sslinfo.txt
+			echo -e '\nPodaci o SSL sertifikatima:' >> sslinfo.txt
 			certbot certificates >> sslinfo.txt
 			chmod 0400 sslinfo.txt
-			echo 'SSL je instaliran!'
+			echo -e ${GREEN}'SSL je instaliran!'${NC}
 		break
 		;;
 		[nN][eE]|[nN])
@@ -237,14 +239,17 @@ while true
 				case $backup_file_confirm in
 				[dD][aA]|[dD])
 					echo 'Kopiranje lozinki...'
-					echo -e 'UNIX User:' $unixuser'\n''UNIX Password:' $unixpass'\n''Hostname:' $hostname > podaci.txt
+					sleep 1s
+					echo -e 'Hostname:' $hostname'\nUNIX User:' $unixuser'\nUNIX Password:' $unixpass'\n' > podaci.txt
+					echo -e 'E-mail:' $email'\nRoot lozinka za mysql:' $mysqlrpass'\n\n' >> podaci.txt
 					echo '*************************************************************************************' >> podaci.txt
-					echo 'VAŽNA NAPOMENA: U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH APLIKACIJA NA NJEMU.' >> podaci.txt
-					echo 'PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ FAJL OBRIŠETE ŠTO PRE.' >> podaci.txt
-					echo 'PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A"' >> podaci.txt
+					echo 'VAŽNA NAPOMENA:' >> podaci.txt
+					echo 'U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH' >> podaci.txt
+					echo 'APLIKACIJA NA NJEMU. PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ' >> podaci.txt
+					echo 'FAJL OBRIŠETE ŠTO PRE. PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A".' >> podaci.txt
 					echo '*************************************************************************************' >> podaci.txt
 					chmod 0000 podaci.txt
-					echo 'Lozinke su iskopirane.'
+					echo -e ${GREEN}'Lozinke su iskopirane.'${NC}
 				break
 				;;
 				[nN][eE]|[nN])
