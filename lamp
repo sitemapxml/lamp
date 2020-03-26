@@ -46,6 +46,7 @@ printf "%b" "$text"
 
 # Unos neophodnih podataka
 echo -e ${YELLOW}'Molimo vas da unesete osnovne podatke o infra-strukturi: '${NC}
+echo
 
 while true; do
     read -p 'Unesite naziv domena bez protokola (bez http://): ' hostname
@@ -149,28 +150,6 @@ echo -e "$unixuser:$unixpass" | sudo chpasswd
 echo "$unixuser ALL=(ALL:ALL) ALL" | sudo EDITOR='tee -a' visudo
 echo -e ${GREEN}"Korisnik $unixuser je kreiran."${NC}
 
-# 6g zaštitni zid
-while true
-	do
-	read -p 'Da li želite da omogućite 6g zaštitni zid? (Da/Ne): ' apache_firewall
-		case $apache_firewall in
-		[dD][aA]|[dD])
-			cp 6g.conf /etc/apache2/6g.conf
-			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
-			systemctl restart apache2
-			echo -e ${GREEN}'Zaštitni zid je omogućen!'${NC}
-		break
-		;;
-		[nN][eE]|[nN])
-			echo 'Preskače se...'
-	break
-	;;
-	*)
-	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
-	;;
-	esac
-done
-
 # Instalacija Wordpress-a
 while true
 	do
@@ -227,6 +206,52 @@ while true
 			certbot certificates >> sslinfo.txt
 			chmod 0400 sslinfo.txt
 			echo -e ${GREEN}'SSL je instaliran!'${NC}
+		break
+		;;
+		[nN][eE]|[nN])
+			echo 'Preskače se...'
+	break
+	;;
+	*)
+	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
+done
+
+# 6g zaštitni zid
+while true
+	do
+	read -p 'Da li želite da omogućite Apache 6G zaštitni zid? (Da/Ne): ' apache_firewall
+		case $apache_firewall in
+		[dD][aA]|[dD])
+			cp 6g.conf /etc/apache2/6g.conf
+			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
+			systemctl restart apache2
+			echo -e ${GREEN}'Zaštitni zid je omogućen!'${NC}
+		break
+		;;
+		[nN][eE]|[nN])
+			echo 'Preskače se...'
+	break
+	;;
+	*)
+	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
+done
+
+# UFW zaštitni zid
+while true
+	do
+	read -p 'Da li želite da omogućite zaštitu portova? (Da/Ne): ' ufw_firewall
+		case $ufw_firewall in
+		[dD][aA]|[dD])
+			ufw --force enable
+			ufw allow 'OpenSSH'
+			ufw allow 'Apache Full'
+			ufw allow '3000/tcp'
+			ufw reload
+			echo -e ${GREEN}'Zaštita portova je omogućena!'${NC}
 		break
 		;;
 		[nN][eE]|[nN])
