@@ -236,19 +236,19 @@ while true
 			read -p 'Da li ste sigurni da želite da nastavite? (Da/Ne): ' backup_file_confirm
 				case $backup_file_confirm in
 				[dD][aA]|[dD])
-				echo 'Kopiranje lozinki...'
-				echo -e 'UNIX User:' $unixuser'\n''UNIX Password:' $unixpass'\n''Hostname:' $hostname > podaci.txt
-				echo '*************************************************************************************' >> podaci.txt
-				echo 'VAŽNA NAPOMENA: U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH APLIKACIJA NA NJEMU.' >> podaci.txt
-				echo 'PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ FAJL OBRIŠETE ŠTO PRE.' >> podaci.txt
-				echo 'PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A"' >> podaci.txt
-				echo '*************************************************************************************' >> podaci.txt
-				chmod 0000 podaci.txt
-				echo 'Lozinke su iskopirane.'
+					echo 'Kopiranje lozinki...'
+					echo -e 'UNIX User:' $unixuser'\n''UNIX Password:' $unixpass'\n''Hostname:' $hostname > podaci.txt
+					echo '*************************************************************************************' >> podaci.txt
+					echo 'VAŽNA NAPOMENA: U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH APLIKACIJA NA NJEMU.' >> podaci.txt
+					echo 'PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ FAJL OBRIŠETE ŠTO PRE.' >> podaci.txt
+					echo 'PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A"' >> podaci.txt
+					echo '*************************************************************************************' >> podaci.txt
+					chmod 0000 podaci.txt
+					echo 'Lozinke su iskopirane.'
 				break
 				;;
 				[nN][eE]|[nN])
-				echo 'Preskače se...'
+					echo 'Preskače se...'
 				break
 				;;
 			*)
@@ -259,7 +259,7 @@ while true
 		break
 		;;
 		[nN][eE]|[nN])
-		echo 'Preskače se...'
+			echo 'Preskače se...'
 		break
 		;;
 	*)
