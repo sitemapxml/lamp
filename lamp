@@ -5,7 +5,7 @@
 # Autor: https://github.com/sitemapxml      #
 # Licenca: MIT                              #
 # Datum prvog objavljivanja: Dec 25, 2019.  #
-# Verzija: 0.9.2-alpha2                     #
+# Verzija: 0.9.3-BETA                       #
 #############################################
 
 # Definicije boja
@@ -55,9 +55,18 @@ while true; do
     echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
 done
 
+while true; do
+    read -s -p 'Unesite lozinku root korisnika: ' rootpass
+	echo
+    read -s -p 'Unesite ponovo da bi ste potvrdili: ' rootpass2
+	echo
+    [ "$rootpass" = "$rootpass2" ] && break
+    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+	echo
+done
+
 echo
 read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
-
 while true; do
     read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
 	echo
@@ -107,18 +116,22 @@ add-apt-repository main
 add-apt-repository universe
 apt-get update
 
+# Instalacija software-properties-common za slučaj da nije instalirano
 apt-get install software-properties-common apt-transport-https -y
 
 # Instalacija php i mysql, php ekstenzije, sitni pomoćni programi zip, unzip i tree
 echo -e ${YELLOW}'Instalira se apache2, php i mysql'${NC}
+sleep 1s
 apt-get install apache2 php mysql-server -y
 echo -e ${YELLOW}'Instaliranje php ekstenzija...'${NC}
+sleep 1s
 apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y 
 systemctl enable mysql apache2
 apt-get install zip unzip tree -y
 
 # Osnovna podešavanja php-a, ServerTokens
 echo -e ${YELLOW}'Konfigurisanje php-a...'${NC}
+sleep 1s
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.2/apache2/php.ini
 sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/7.2/apache2/php.ini
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/7.2/apache2/php.ini
@@ -127,6 +140,7 @@ systemctl restart apache2
 
 # Webmin instalacija
 echo -e ${YELLOW}'Instaliranje Webmin kontrolne table...'${NC}
+sleep 1s
 echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
 apt-key add jcameron-key.asc
 apt-get update
@@ -135,6 +149,8 @@ sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
 /etc/init.d/webmin restart
 
 # Podešavanje veb servera
+echo -e ${YELLOW}'Konfigurisanje Apache servera...'${NC}
+sleep 1s
 rm -rf /var/www/html
 mkdir /var/www/$hostname
 cp vhost.conf /etc/apache2/sites-available/$hostname.conf
@@ -145,14 +161,23 @@ a2ensite $hostname
 systemctl restart apache2
 
 # Dodavanje UNIX korisnika
+echo -e ${YELLOW}'Dodavanje UNIX korisnika...'${NC}
+sleep 1s
 adduser $unixuser --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
-echo -e "$unixuser:$unixpass" | sudo chpasswd
-echo "$unixuser ALL=(ALL:ALL) ALL" | sudo EDITOR='tee -a' visudo
+echo -e "$unixuser:$unixpass" | chpasswd
+echo "$unixuser ALL=(ALL:ALL) ALL" | EDITOR='tee -a' visudo
 echo -e ${GREEN}"Korisnik $unixuser je kreiran."${NC}
+
+# Postavljanje nove root lozinke
+echo -e ${YELLOW}'Postavljanje nove lozinke za root...'${NC}
+sleep 1s
+echo -e "root:$rootpass" | chpasswd
+echo -e ${GREEN}'Lozinka je ažurirana!'${NC}
 
 # Instalacija Wordpress-a
 while true
 	do
+	echo -e ${YELLOW}'Korak (1/5)'${NC}
 	read -p 'Da li želite da instalirate Wordpress? (Da/Ne): ' wp_install
 		case $wp_install in
 		[dD][aA]|[dD])
@@ -160,6 +185,7 @@ while true
 			wget https://sr.wordpress.org/latest-sr_RS.tar.gz
 			tar -xzvf latest-sr_RS.tar.gz
 			mv wordpress /var/www/$hostname/html
+			echo 'define('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
 			chown www-data:www-data -R /var/www/$hostname/html
 
 			# Instaliranje dodatnih php ekstenzija
@@ -168,6 +194,27 @@ while true
 
 			# Brisanje nepotrebnih fajlova
 			rm latest-sr_RS.tar.gz
+			
+			# Konfigurisanje Wordpress Multisite instalacije
+				while true
+					do
+					read -p 'Da li želite da omogućite Wordpress Multisite? (Da/Ne): ' wp_install_multisite
+						case $wp_install_multisite in
+						[dD][aA]|[dD])
+						# Instaliranje faljova
+						echo 'Konfiguriše se Multisite...'
+						echo -e '/* Multisite */\ndefine( 'WP_ALLOW_MULTISITE', true );' >> /var/www/$hostname/html/wp-config-sample.php
+						echo -e ${GREEN}'Multisite je podešen!'${NC}
+						break
+						;;
+					[nN][eE]|[nN])
+						break
+						;;
+						*)
+						echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+						;;
+					esac
+				done
 			echo -e ${GREEN}'Wordpress je instaliran!'${NC}
 		break
 		;;
@@ -177,8 +224,8 @@ while true
 			cp index.html /var/www/$hostname/html/index.html
 			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
 			echo 'Podešeni su index.html i phpinfo fajl.'
-	break
-	;;
+		break
+		;;
 	*)
 	echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
 	;;
@@ -188,6 +235,7 @@ done
 # Instalacija SSL sertifikata
 while true
 	do
+	echo -e ${YELLOW}'Korak (2/5)'${NC}
 	read -p 'Da li želite da instalirate SSL sertifikat? (Da/Ne): ' ssl_install
 		case $ssl_install in
 		[dD][aA]|[dD])
@@ -221,6 +269,7 @@ done
 # 6g zaštitni zid
 while true
 	do
+	echo -e ${YELLOW}'Korak (3/5)'${NC}
 	read -p 'Da li želite da omogućite Apache 6G zaštitni zid? (Da/Ne): ' apache_firewall
 		case $apache_firewall in
 		[dD][aA]|[dD])
@@ -243,6 +292,7 @@ done
 # UFW zaštitni zid
 while true
 	do
+	echo -e ${YELLOW}'Korak (4/5)'${NC}
 	read -p 'Da li želite da omogućite zaštitu portova? (Da/Ne): ' ufw_firewall
 		case $ufw_firewall in
 		[dD][aA]|[dD])
@@ -267,6 +317,7 @@ done
 # Kreiranje fajla sa lozinkama
 while true
 	do
+	echo -e ${YELLOW}'Korak (5/5)'${NC}
 	read -r -p 'Da li želite da napravite rezervnu kopiju korisničkih imena i lozinki? (Da/Ne): ' backup_file
 		case $backup_file in
 		[dD][aA]|[dD])
@@ -312,3 +363,6 @@ while true
 done
 
 echo -e ${GREEN}'Instalacija je završena!'${NC}
+
+# Brisanje bash istorije
+cat /dev/null > ~/.bash_history && history -c
