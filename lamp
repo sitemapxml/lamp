@@ -142,7 +142,7 @@ systemctl restart apache2
 echo -e ${YELLOW}'Instaliranje Webmin kontrolne table...'${NC}
 sleep 1s
 echo "deb http://download.webmin.com/download/repository sarge contrib" >> /etc/apt/sources.list
-apt-key add jcameron-key.asc
+apt-key add files/jcameron-key.asc
 apt-get update
 apt-get --yes install webmin
 sed -i 's/port=10000/port=3000/g' /etc/webmin/miniserv.conf
@@ -153,7 +153,7 @@ echo -e ${YELLOW}'Konfigurisanje Apache servera...'${NC}
 sleep 1s
 rm -rf /var/www/html
 mkdir /var/www/$hostname
-cp vhost.conf /etc/apache2/sites-available/$hostname.conf
+cp files/vhost.conf /etc/apache2/sites-available/$hostname.conf
 sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
@@ -221,7 +221,7 @@ while true
 		[nN][eE]|[nN])
 			# Iskopiraj index.html u webroot
 			mkdir /var/www/$hostname/html
-			cp index.html /var/www/$hostname/html/index.html
+			cp files/index.html /var/www/$hostname/html/index.html
 			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
 			echo 'Podešeni su index.html i phpinfo fajl.'
 		break
@@ -273,7 +273,7 @@ while true
 	read -p 'Da li želite da omogućite Apache 6G zaštitni zid? (Da/Ne): ' apache_firewall
 		case $apache_firewall in
 		[dD][aA]|[dD])
-			cp 6g.conf /etc/apache2/6g.conf
+			cp files/6g.conf /etc/apache2/6g.conf
 			sed -i "s/#6g //g" /etc/apache2/sites-available/$hostname.conf
 			systemctl restart apache2
 			echo -e ${GREEN}'Zaštitni zid je omogućen!'${NC}
