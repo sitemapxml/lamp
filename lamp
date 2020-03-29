@@ -185,7 +185,7 @@ while true
 			wget https://sr.wordpress.org/latest-sr_RS.tar.gz
 			tar -xzvf latest-sr_RS.tar.gz
 			mv wordpress /var/www/$hostname/html
-			echo -e '/* FS Method */\ndefine('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
+			# echo -e '/* FS Method */\ndefine('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
 			chown www-data:www-data -R /var/www/$hostname/html
 
 			# Instaliranje dodatnih php ekstenzija
@@ -203,7 +203,7 @@ while true
 						[dD][aA]|[dD])
 						# Instaliranje faljova
 						echo 'Konfiguriše se Multisite...'
-						echo -e '/* Multisite */\ndefine( 'WP_ALLOW_MULTISITE', true );' >> /var/www/$hostname/html/wp-config-sample.php
+						# echo -e '/* Multisite */\ndefine( 'WP_ALLOW_MULTISITE', true );' >> /var/www/$hostname/html/wp-config-sample.php
 						echo -e ${GREEN}'Multisite je podešen!'${NC}
 						break
 						;;
