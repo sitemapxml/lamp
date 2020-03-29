@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Uklanjanje universe repozitorije
+add-apt-repository --remove universe
+
+# Deinstalacija apache servera
+apt-get purge apache2 apache2-utils -y
+apt-get autoremove --purge -y
+
+# Uklanjanje preostalih direktorijuma
+rm -rf /usr/sbin/apache2
+rm -rf /usr/lib/apache2
+rm -rf /etc/apache2
+rm -rf /usr/share/man/man8/apache2.8.gz
+
+# Deinstalacija mysql servera
+systemctl stop mysql
+apt-get --yes purge mysql-server mysql-client
+apt-get --yes autoremove --purge
+apt-get autoclean
+
+# Uklanjanje preostalih direktorijuma
+rm /etc/apparmor.d/abstractions/mysql
+rm /etc/apparmor.d/cache/usr.sbin.mysqld
+
+# Brisanje mysql istorije
+rm ~/.mysql_history
+
+# Brisanje istorije svih mysql korisnika na sistemu
+awk -F : '{ print($6 "/.mysql_history"); }' /etc/passwd | xargs -r -d '\n' -- sudo rm -f --
+
+# Brisanje log fajlova izvan postojećih home direktorijuma
+find / -name .mysql_history -delete
+
+# Uklanjanje php-a
+apt-get purge 'php*'
+apt-get autoremove
+apt-get autoclean

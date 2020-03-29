@@ -185,7 +185,7 @@ while true
 			wget https://sr.wordpress.org/latest-sr_RS.tar.gz
 			tar -xzvf latest-sr_RS.tar.gz
 			mv wordpress /var/www/$hostname/html
-			echo 'define('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
+			echo -e '/* FS Method */\ndefine('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
 			chown www-data:www-data -R /var/www/$hostname/html
 
 			# Instaliranje dodatnih php ekstenzija
@@ -250,9 +250,9 @@ while true
 			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
 
 			# Putanje do instaliranih SSL sertifikata
-			echo -e '\nPodaci o SSL sertifikatima:' >> sslinfo.txt
-			certbot certificates >> sslinfo.txt
-			chmod 0400 sslinfo.txt
+			echo -e '\nPodaci o SSL sertifikatima:' >> ssl-info.txt
+			certbot certificates >> ssl-info.txt
+			chmod 0400 ssl-info.txt
 			echo -e ${GREEN}'SSL je instaliran!'${NC}
 		break
 		;;
