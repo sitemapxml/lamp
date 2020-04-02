@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Definicije boja
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+
+# Reset boja - No Color
+NC='\033[0m'
+
+# Unos neophodnih podataka
+echo -e ${YELLOW}'.'${NC}
+echo
+
+while true; do
+    read -p 'Unesite naziv domena bez protokola (bez http://): ' hostname
+    read -p 'Unesite ponovo da bi ste potvrdili: ' hostname2
+    [ "$hostname" = "$hostname2" ] && break
+    echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
+done
+
+echo -e ${YELLOW}'Dodavanje veb sajta...'${NC}
+sleep 1s
+mkdir /var/www/$hostname
+cp files/vhost.conf /etc/apache2/sites-available/$hostname.conf
+sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
+a2ensite $hostname
+systemctl restart apache2
