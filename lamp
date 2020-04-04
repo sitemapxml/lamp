@@ -210,7 +210,10 @@ while true
 			# Kreiranje baze podataka
 			database_password=`date +%s | sha256sum | base64 | head -c 32`
 			mysql -u root -p -e "create database $hostname DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; GRANT ALL PRIVILEGES ON $hostname.* TO $unixuser@localhost IDENTIFIED BY '$database_password'; flush privileges;"
-			echo -e 'Naziv baze podataka:' $hostname'\nKorisničko ime:' $unixuser'\nLozinka:' $database_password'\n' >> database-info.txt
+			echo '==================================================================' > database-info.txt
+			echo '============= Pristupni parametri za bazu podataka ===============' >> database-info.txt
+			echo '==================================================================' >> database-info.txt
+			echo -e '\n''Naziv baze podataka:' $hostname'\nKorisničko ime:' $unixuser'\nLozinka:' $database_password'\n' >> database-info.txt
 
 			# Konfigurisanje Wordpress Multisite instalacije
 				while true
