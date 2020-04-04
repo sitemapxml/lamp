@@ -27,3 +27,57 @@ sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2ensite $hostname
 systemctl restart apache2
+
+# Instalacija Wordpress-a
+while true
+	do
+	echo -e ${YELLOW}'Korak (1/5)'${NC}
+	read -p 'Da li želite da podesite još jedan Wordpress sajt? (Da/Ne): ' wp_install
+		case $wp_install in
+		[dD][aA]|[dD])
+			# Instaliranje faljova
+			wget https://sr.wordpress.org/latest-sr_RS.tar.gz
+			tar -xzvf latest-sr_RS.tar.gz
+			mv wordpress /var/www/$hostname/html
+			chown www-data:www-data -R /var/www/$hostname/html
+			echo -e '\n/* FS Method */\ndefine('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
+
+			# Brisanje nepotrebnih fajlova
+			rm latest-sr_RS.tar.gz
+			
+			# Konfigurisanje Wordpress Multisite instalacije
+				while true
+					do
+					read -p 'Da li želite da omogućite Wordpress Multisite? (Da/Ne): ' wp_install_multisite
+						case $wp_install_multisite in
+						[dD][aA]|[dD])
+							# Instaliranje faljova
+							echo 'Konfiguriše se Multisite...'
+							echo -e '\n/* Multisite */\ndefine( 'WP_ALLOW_MULTISITE', true );' >> /var/www/$hostname/html/wp-config-sample.php
+							echo -e ${GREEN}'Multisite je podešen!'${NC}
+						break
+						;;
+					[nN][eE]|[nN])
+						break
+						;;
+						*)
+							echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+						;;
+					esac
+				done
+			echo -e ${GREEN}'Wordpress je instaliran!'${NC}
+		break
+		;;
+		[nN][eE]|[nN])
+			# Iskopiraj index.html u webroot
+			mkdir /var/www/$hostname/html
+			cp files/index.html /var/www/$hostname/html/index.html
+			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
+			echo 'Podešeni su index.html i phpinfo fajl.'
+		break
+		;;
+	*)
+		echo -e ${RED}'Molimo vas da odgovorite sa Da ili Ne.'${NC}
+	;;
+	esac
+done
