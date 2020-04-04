@@ -179,6 +179,13 @@ sleep 1s
 echo -e "root:$rootpass" | chpasswd
 echo -e ${GREEN}'Lozinka je ažurirana!'${NC}
 
+# Podešavanje hostname-a prema unetom domenu
+hostnamectl set-hostname $hostname
+
+# Kreiranje direktorijuma za skladištenje lozinki
+mkdir .podaci
+chmod 0000 -R .podaci
+
 # Instalacija Wordpress-a
 while true
 	do
