@@ -68,7 +68,7 @@ while true
 		[dD][aA]|[dD])
 			echo 'Deinstalacija je u toku...'
 			# Uklanjanje php-a
-			apt-get purge 'php*'
+			apt-get purge 'php*' -y
 			apt-get autoremove
 			apt-get autoclean
 			echo -e ${GREEN}'PHP je deinstaliran!'${NC}
