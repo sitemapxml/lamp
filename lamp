@@ -268,6 +268,12 @@ while true
 
 			# Instalacija Let's encrypt SSL sertifikata
 			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
+			
+			# Podesavanje SSL-a za Webmin
+			echo -e ${YELLOW}'Podesavanje SSL-a za Webmin...'${NC}
+			sed -i '/keyfile/d' /etc/webmin/miniserv.conf
+			echo -e 'keyfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''privkey.pem' >> /etc/webmin/miniserv.conf
+			echo -e 'certfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''fullchain.pem' >> /etc/webmin/miniserv.conf
 
 			# Putanje do instaliranih SSL sertifikata
 			echo -e '\nPodaci o SSL sertifikatima:' >> ssl-info.txt
