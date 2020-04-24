@@ -52,6 +52,7 @@ printf "%b" "$text"
 echo -e ${YELLOW}'Molimo vas da unesete osnovne podatke o infra-strukturi: '${NC}
 echo
 
+echo -e ${YELLOW}'Korak (1/6)'${NC}
 while true; do
     read -p 'Unesite naziv domena bez protokola (bez http://): ' hostname
     read -p 'Unesite ponovo da bi ste potvrdili: ' hostname2
@@ -59,6 +60,7 @@ while true; do
     echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
 done
 
+echo -e ${YELLOW}'Korak (2/6)'${NC}
 while true; do
     read -s -p 'Unesite lozinku root korisnika: ' rootpass
 	echo
@@ -70,7 +72,10 @@ while true; do
 done
 
 echo
+echo -e ${YELLOW}'Korak (3/6)'${NC}
 read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
+
+echo -e ${YELLOW}'Korak (4/6)'${NC}
 while true; do
     read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
 	echo
@@ -82,6 +87,7 @@ while true; do
 done
 
 echo
+echo -e ${YELLOW}'Korak (5/6)'${NC}
 echo -e ${YELLOW}'Podešavanje lozinke za MYSQL root korisnika'${NC}
 while true; do
     read -s -p 'Unesite lozinku za MYSQL root: ' mysqlrpass
@@ -94,6 +100,7 @@ while true; do
 done
 
 echo
+echo -e ${YELLOW}'Korak (6/6)'${NC}
 echo -e ${YELLOW}'Podešavanje Email adrese administratora'${NC}
 while true; do
     read -p 'Unesite vašu Email adresu: ' email
@@ -161,6 +168,7 @@ cp files/vhost.conf /etc/apache2/sites-available/$hostname.conf
 sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
+rm 000-default.conf
 a2ensite $hostname
 a2enmod rewrite
 systemctl restart apache2
@@ -274,6 +282,7 @@ while true
 			sed -i '/keyfile/d' /etc/webmin/miniserv.conf
 			echo -e 'keyfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''privkey.pem' >> /etc/webmin/miniserv.conf
 			echo -e 'certfile=''/''etc''/''letsencrypt''/''live''/'"$hostname"'/''fullchain.pem' >> /etc/webmin/miniserv.conf
+			/etc/init.d/webmin restart
 
 			# Putanje do instaliranih SSL sertifikata
 			echo -e '\nPodaci o SSL sertifikatima:' >> ssl-info.txt
