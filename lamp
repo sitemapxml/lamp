@@ -230,7 +230,7 @@ while true
 			echo '==================================================================' > database-info.txt
 			echo '============= Pristupni parametri za bazu podataka ===============' >> database-info.txt
 			echo '==================================================================' >> database-info.txt
-			echo -e '\n\n''Naziv baze podataka:' $hostname'\nKorisničko ime:' $unixuser'\nLozinka:' $database_password'\n' >> database-info.txt
+			echo -e '\n\n''Naziv baze podataka:' $db_name'\nKorisničko ime:' $unixuser'\nLozinka:' $database_password'\n' >> database-info.txt
 
 			# Konfigurisanje Wordpress Multisite instalacije
 				while true
