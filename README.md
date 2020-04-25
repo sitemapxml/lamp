@@ -66,4 +66,20 @@ Za slučaj da je javi potreba za prilagođavanjem skripte, u tabeli ispod data j
 | MYSQL root lozinka            | mysqlrpass |
 | Email adresa administratora   | email      |
 
+# Struktura projekta
+
+``` 
+lamp/
+├── files/
+│   ├── 6g.conf
+│   ├── index.html
+│   ├── jcameron-key.asc
+│   └── vhost.conf
+├── lamp
+├── mksite
+├── uninstall
+├── LICENSE
+└── README.md
+```
+
 Licenca: [MIT](LICENSE)
