@@ -44,4 +44,26 @@ What would you like to do about menu.lst?
 ```
 Odaberite opciju `keep the local version currently installed` i odaberite `<Ok>` ili pritisnite `[Enter]`
 
+# Ulazni parametri
+Na početku instalacije postoji šest upita na koje morate da odgovorite kako bi skripta bila pohranjena potrebmin informacijama i kako bi konfigurisanje moglo automatski da se izvrši. 
+
+ - **Naziv domena (hostname)** - koristi se ekstenzivno pri instalaciji. Prema unetom nazivu hosta kreira se `web root` i `apache virtual host` fajl. Ukoliko odaberete instalaciju Wordpress-a naziv baze podataka će biti dodeljen prema nazivu hosta sa donjom crtom umesto tačke. (npr. `example_com`)
+ - **Lozinka root korisnika** - root lozinka servera
+ - **Korisničko ime UNIX korisnika** - ovom korisniku će biti data prava root-a
+ - **Lozinka UNIX korisnika**
+ - **MYSQL root lozinka**
+ - **Email adresa administratora** - koristi se pri instalaciji SSL sertifikata
+
+
+Za slučaj da je javi potreba za prilagođavanjem skripte, u tabeli ispod data je lista ulaznih parametara sa njihovim shell varijablama:
+
+| FUNKCIJA                      | VARIJABLA  |
+|:------------------------------|:-----------|
+| Naziv domena                  | hostname   |
+| Lozinka root korisnika        | rootpass   |
+| Korisničko ime UNIX korisnika | unixuser   |
+| Lozinka UNIX korisnika        | unixpass   |
+| MYSQL root lozinka            | mysqlrpass |
+| Email adresa administratora   | email      |
+
 Licenca: [MIT](LICENSE)
