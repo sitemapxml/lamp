@@ -55,6 +55,7 @@ echo
 echo -e ${YELLOW}'Korak (1/6)'${NC}
 while true; do
     read -p 'Unesite naziv domena bez protokola (bez http://): ' hostname
+	hostname=${hostname:-default}
     read -p 'Unesite ponovo da bi ste potvrdili: ' hostname2
     [ "$hostname" = "$hostname2" ] && break
     echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
@@ -63,6 +64,7 @@ done
 echo -e ${YELLOW}'Korak (2/6)'${NC}
 while true; do
     read -s -p 'Unesite lozinku root korisnika: ' rootpass
+	rootpass=${rootpass:-default}
 	echo
     read -s -p 'Unesite ponovo da bi ste potvrdili: ' rootpass2
 	echo
@@ -74,10 +76,12 @@ done
 echo
 echo -e ${YELLOW}'Korak (3/6)'${NC}
 read -p 'Unesite korisničko ime UNIX korisnika: ' unixuser
+unixuser=${unixuser:-default}
 
 echo -e ${YELLOW}'Korak (4/6)'${NC}
 while true; do
     read -s -p 'Unesite lozinku UNIX korisnika: ' unixpass
+	unixpass=${unixpass:-default}
 	echo
     read -s -p 'Unesite ponovo da bi ste potvrdili: ' unixpass2
 	echo
@@ -91,6 +95,7 @@ echo -e ${YELLOW}'Korak (5/6)'${NC}
 echo -e ${YELLOW}'Podešavanje lozinke za MYSQL root korisnika'${NC}
 while true; do
     read -s -p 'Unesite lozinku za MYSQL root: ' mysqlrpass
+	mysqlrpass=${mysqlrpass:-default}
 	echo
     read -s -p 'Unesite ponovo da bi ste potvrdili: ' mysqlrpass2
 	echo
@@ -105,7 +110,7 @@ echo -e ${YELLOW}'Podešavanje Email adrese administratora'${NC}
 while true; do
     read -p 'Unesite vašu Email adresu: ' email
     read -p 'Unesite ponovo da bi ste potvrdili: ' email2
-    [ "$email" = "$email2" ] && break
+    [ "$email" = "$email2" ] && email=${email:-webmaster@example.com} && break
     echo -e ${RED}'Molimo pokušajte ponovo.'${NC}
 	echo
 done

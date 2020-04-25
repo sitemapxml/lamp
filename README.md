@@ -33,7 +33,7 @@ To znači da DNS propagacija još uvek nije izvršena i da je potrebno da saček
 Nakon instalacije potrebno je nadograditi zastarele programe i restartovati server.
 
 ```
-apt update && reboot
+apt update && apt upgrade && reboot
 ```
 Ukoliko se pojavi kutija za dijalog kao u primeru ispod:
 
@@ -65,6 +65,9 @@ Za slučaj da je javi potreba za prilagođavanjem skripte, u tabeli ispod data j
 | Lozinka UNIX korisnika        | unixpass   |
 | MYSQL root lozinka            | mysqlrpass |
 | Email adresa administratora   | email      |
+
+Podrazumevana vrednost svih promenljivih (ne računajući promenljivu `email`) je `default`
+Podrazumevana vrednost promenljive `email` je `webmaster@example.com`
 
 # Struktura projekta
 
