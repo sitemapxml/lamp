@@ -174,7 +174,7 @@ cp files/vhost.conf /etc/apache2/sites-available/$hostname.conf
 sed -i "s/sn_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 sed -i "s/dir_default/$hostname/g" /etc/apache2/sites-available/$hostname.conf
 a2dissite 000-default
-rm 000-default.conf
+rm /etc/apache2/sites-available/000-default.conf
 a2ensite $hostname
 a2enmod rewrite
 systemctl restart apache2
