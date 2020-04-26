@@ -68,6 +68,7 @@ while true
 		break
 		;;
 		[nN][eE]|[nN])
+		unixuser="default"
 	break
 	;;
 	*)
@@ -142,6 +143,8 @@ while true
 			mkdir /var/www/$hostname/html
 			cp files/index.html /var/www/$hostname/html/index.html
 			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
+			sed -i "s/s_title/Domen $hostname je uspešno podešen\!/g" /var/www/$hostname/html/index.html
+			sed -i "s/webmin_url/$hostname/g" /var/www/$hostname/html/index.html
 			echo 'Podešeni su index.html i phpinfo fajl.'
 		break
 		;;
@@ -203,5 +206,5 @@ while true
 	esac
 done
 
-echo -e ${YELLOW}'Instalacija je završena!'${NC}
-echo -e ${YELLOW}'Domen '"$hostname"' je dodat!'${NC}
+echo -e ${GREEN}'Instalacija je završena!'${NC}
+echo -e ${GREEN}'Domen '"$hostname"' je dodat!'${NC}
