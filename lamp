@@ -5,7 +5,7 @@
 # Autor: https://github.com/sitemapxml      #
 # Licenca: MIT                              #
 # Datum prvog objavljivanja: Dec 25, 2019.  #
-# Verzija: 0.9.3-BETA                       #
+# Verzija: 0.9.4-BETA-2                     #
 #############################################
 
 # Definicije boja
@@ -17,35 +17,36 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 # Davanje privilegija za pokretanje ostalim skriptama
-chmod +x mksite
-chmod +x uninstall
+chmod +x mksite uninstall
 
 # Poruka dobrodošlice!
 text=''
-text+="${GREEN}*************************************************\n"
-text+="Dobro došli u LAMP skriptu za instalaciju!\n"
-text+="Sledeći programi će biti instalirani:\n"
-text+="   - apache2 veb server\n"
-text+="   - mysql 5.6\n"
-text+="   - php 7.2\n"
-text+="PHP ekstenzije:\n"
-text+="   php-zip php-mysql php-mbstring php-curl\n"
-text+="   php-gd php-xml php-xmlrpc php-soap php-intl\n"
-text+="Kontrolna tabla:\n"
-text+="   Webmin - poslednja verzija\n"
-text+="Sitni pomoćni programi:\n"
-text+="   zip unzip tree\n"
-text+="Dodatna podešavanja php-a:\n"
-text+="   cgi.fix_pathinfo=0\n"
-text+="   post_max_size = 280M\n"
-text+="   upload_max_filesize = 256M\n"
-text+="NAPOMENE:\n"
-text+="   Biće napravljen virtualhost fajl sa osnovnim\n"
-text+="podešavanjima domena. U toku instalacije imaćete\n"
-text+="mogućnost da odaberete instalaciju Wordpress-a\n"
-text+="u suprotnom biće kreiran probni index.html\n"
-text+="i info.php fajl za proveru ispravnosti instalacije.\n"
-text+="***************************************************\n${NC}"
+text+="${GREEN}"
+text+="┌──────────────────────────────────────────────────────┐\n"
+text+="│ Dobro došli u LAMP skriptu za instalaciju!           │\n"
+text+="│ Sledeći programi će biti instalirani:                │\n"
+text+="│    - apache2 http server                             │\n"
+text+="│    - mysql 5.6                                       │\n"
+text+="│    - php 7.2                                         │\n"
+text+="│ PHP ekstenzije:                                      │\n"
+text+="│    php-zip php-mysql php-mbstring php-curl           │\n"
+text+="│    php-gd php-xml php-xmlrpc php-soap php-intl       │\n"
+text+="│ Kontrolna tabla:                                     │\n"
+text+="│    Webmin - poslednja verzija                        │\n"
+text+="│ Dodatna podešavanja php-a:                           │\n"
+text+="│    post_max_size = 280M                              │\n"
+text+="│    upload_max_filesize = 256M                        │\n"
+text+="│ NAPOMENE:                                            │\n"
+text+="│    Biće napravljen virtualhost fajl sa osnovnim      │\n"
+text+="│ podešavanjima domena. U toku instalacije imaćete     │\n"
+text+="│ mogućnost da odaberete instalaciju Wordpress-a       │\n"
+text+="│ u suprotnom biće kreiran probni index.html           │\n"
+text+="│ i info.php fajl za proveru ispravnosti instalacije.  │\n"
+text+="│                                                      │\n"
+text+="│ Za više informacija posetite:                        │\n"
+text+="│ https://github.com/sitemapxml/lamp                   │\n"
+text+="└──────────────────────────────────────────────────────┘\n"
+text+="${NC}"
 printf "%b" "$text"
 
 # Unos neophodnih podataka
@@ -142,7 +143,7 @@ sleep 1s
 apt-get install apache2 php mysql-server -y
 echo -e ${YELLOW}'Instaliranje php ekstenzija...'${NC}
 sleep 1s
-apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y 
+apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xml php-json php-soap php-intl -y
 systemctl enable mysql apache2
 apt-get install zip unzip tree -y
 
@@ -198,6 +199,7 @@ hostnamectl set-hostname $hostname
 
 # Kreiranje direktorijuma za skladištenje lozinki
 mkdir .podaci
+mkdir .podaci/root
 chmod 0000 -R .podaci
 
 # Instalacija Wordpress-a
@@ -260,6 +262,8 @@ while true
 			mkdir /var/www/$hostname/html
 			cp files/index.html /var/www/$hostname/html/index.html
 			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
+			sed -i "s/s_title/Domen $hostname je uspešno podešen\!/g" /var/www/$hostname/html/index.html
+			sed -i "s/webmin_url/$hostname/g" /var/www/$hostname/html/index.html
 			echo 'Podešeni su index.html i phpinfo fajl.'
 		break
 		;;
@@ -285,7 +289,7 @@ while true
 
 			# Instalacija Let's encrypt SSL sertifikata
 			certbot --apache --non-interactive --agree-tos --domains $hostname --email $email
-			
+
 			# Podesavanje SSL-a za Webmin
 			echo -e ${YELLOW}'Podesavanje SSL-a za Webmin...'${NC}
 			sed -i '/keyfile/d' /etc/webmin/miniserv.conf
@@ -294,14 +298,13 @@ while true
 			/etc/init.d/webmin restart
 
 			# Putanje do instaliranih SSL sertifikata
-			echo -e '\nPodaci o SSL sertifikatima:' >> ssl-info.txt
-			certbot certificates >> ssl-info.txt
-			chmod 0400 ssl-info.txt
+			echo -e '\nPodaci o SSL sertifikatima:' > .podaci/root/ssl-info.txt
+			certbot certificates >> .podaci/root/ssl-info.txt
+			chmod 0000 .podaci/root/ssl-info.txt
 			echo -e ${GREEN}'SSL je instaliran!'${NC}
 		break
 		;;
 		[nN][eE]|[nN])
-			echo 'Preskače se...'
 	break
 	;;
 	*)
@@ -324,7 +327,6 @@ while true
 		break
 		;;
 		[nN][eE]|[nN])
-			echo 'Preskače se...'
 	break
 	;;
 	*)
@@ -349,7 +351,6 @@ while true
 		break
 		;;
 		[nN][eE]|[nN])
-			echo 'Preskače se...'
 	break
 	;;
 	*)
@@ -373,20 +374,24 @@ while true
 				[dD][aA]|[dD])
 					echo 'Kopiranje lozinki...'
 					sleep 1s
-					echo -e 'Hostname:' $hostname'\nUNIX User:' $unixuser'\nUNIX Password:' $unixpass'\n' > podaci.txt
-					echo -e 'E-mail:' $email'\nRoot lozinka za mysql:' $mysqlrpass'\n\n' >> podaci.txt
-					echo '*************************************************************************************' >> podaci.txt
-					echo 'VAŽNA NAPOMENA:' >> podaci.txt
-					echo 'U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH' >> podaci.txt
-					echo 'APLIKACIJA NA NJEMU. PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ' >> podaci.txt
-					echo 'FAJL OBRIŠETE ŠTO PRE. PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A".' >> podaci.txt
-					echo '*************************************************************************************' >> podaci.txt
-					chmod 0000 podaci.txt
+					echo '*************************************************************************************' > .podaci/root/podaci.txt
+					echo '******************************** Pristupni parametri ********************************' >> .podaci/root/podaci.txt
+					echo '*************************************************************************************' >> .podaci/root/podaci.txt
+
+					echo -e '\n\nHostname: '"$hostname"'\nroot lozinka: '"$rootpass"'\n\nUNIX korisnik: '"$unixuser"'\nUNIX lozinka: '"$unixpass"'\n' >> .podaci/root/podaci.txt
+					echo -e 'MYSQL root lozinka: '"$mysqlrpass"'\n\nE-mail: '"$email"'\n\n' >> .podaci/root/podaci.txt
+
+					echo '*************************************************************************************' >> .podaci/root/podaci.txt
+					echo 'VAŽNA NAPOMENA:' >> .podaci/root/podaci.txt
+					echo 'U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH' >> .podaci/root/podaci.txt
+					echo 'APLIKACIJA NA NJEMU. PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ' >> .podaci/root/podaci.txt
+					echo 'FAJL OBRIŠETE ŠTO PRE. PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A".' >> .podaci/root/podaci.txt
+					echo '*************************************************************************************' >> .podaci/root/podaci.txt
+					chmod 0000 .podaci/root/podaci.txt
 					echo -e ${GREEN}'Lozinke su iskopirane.'${NC}
 				break
 				;;
 				[nN][eE]|[nN])
-					echo 'Preskače se...'
 				break
 				;;
 			*)
@@ -397,7 +402,6 @@ while true
 		break
 		;;
 		[nN][eE]|[nN])
-			echo 'Preskače se...'
 		break
 		;;
 	*)
