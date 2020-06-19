@@ -199,7 +199,6 @@ hostnamectl set-hostname $hostname
 
 # Kreiranje direktorijuma za skladištenje lozinki
 mkdir .podaci
-mkdir .podaci/root
 chmod 0000 -R .podaci
 
 # Instalacija Wordpress-a
@@ -298,9 +297,9 @@ while true
 			/etc/init.d/webmin restart
 
 			# Putanje do instaliranih SSL sertifikata
-			echo -e '\nPodaci o SSL sertifikatima:' > .podaci/root/ssl-info.txt
-			certbot certificates >> .podaci/root/ssl-info.txt
-			chmod 0000 .podaci/root/ssl-info.txt
+			echo -e '\nPodaci o SSL sertifikatima:' > .podaci/ssl-info.txt
+			certbot certificates >> .podaci/ssl-info.txt
+			chmod 0000 .podaci/ssl-info.txt
 			echo -e ${GREEN}'SSL je instaliran!'${NC}
 		break
 		;;
@@ -374,20 +373,20 @@ while true
 				[dD][aA]|[dD])
 					echo 'Kopiranje lozinki...'
 					sleep 1s
-					echo '*************************************************************************************' > .podaci/root/podaci.txt
-					echo '******************************** Pristupni parametri ********************************' >> .podaci/root/podaci.txt
-					echo '*************************************************************************************' >> .podaci/root/podaci.txt
+					echo '*************************************************************************************' > .podaci/podaci.txt
+					echo '******************************** Pristupni parametri ********************************' >> .podaci/podaci.txt
+					echo '*************************************************************************************' >> .podaci/podaci.txt
 
-					echo -e '\n\nHostname: '"$hostname"'\nroot lozinka: '"$rootpass"'\n\nUNIX korisnik: '"$unixuser"'\nUNIX lozinka: '"$unixpass"'\n' >> .podaci/root/podaci.txt
-					echo -e 'MYSQL root lozinka: '"$mysqlrpass"'\n\nE-mail: '"$email"'\n\n' >> .podaci/root/podaci.txt
+					echo -e '\n\nHostname: '"$hostname"'\nroot lozinka: '"$rootpass"'\n\nUNIX korisnik: '"$unixuser"'\nUNIX lozinka: '"$unixpass"'\n' >> .podaci/podaci.txt
+					echo -e 'MYSQL root lozinka: '"$mysqlrpass"'\n\nE-mail: '"$email"'\n\n' >> .podaci/podaci.txt
 
-					echo '*************************************************************************************' >> .podaci/root/podaci.txt
-					echo 'VAŽNA NAPOMENA:' >> .podaci/root/podaci.txt
-					echo 'U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH' >> .podaci/root/podaci.txt
-					echo 'APLIKACIJA NA NJEMU. PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ' >> .podaci/root/podaci.txt
-					echo 'FAJL OBRIŠETE ŠTO PRE. PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A".' >> .podaci/root/podaci.txt
-					echo '*************************************************************************************' >> .podaci/root/podaci.txt
-					chmod 0000 .podaci/root/podaci.txt
+					echo '*************************************************************************************' >> .podaci/podaci.txt
+					echo 'VAŽNA NAPOMENA:' >> .podaci/podaci.txt
+					echo 'U OVOM FAJLU SE NALAZE INFORMACIJE KOJE KOGU UGROZITI BEZBEDNOST SERVERA I SVIH' >> .podaci/podaci.txt
+					echo 'APLIKACIJA NA NJEMU. PREPORUČUJE SE DA LOZINKE SAČUVATE NA SIGURNOM MESTU I DA OVAJ' >> .podaci/podaci.txt
+					echo 'FAJL OBRIŠETE ŠTO PRE. PREPORUČUJE SE KORIŠĆENJE "PASSWORD MANAGER-A".' >> .podaci/podaci.txt
+					echo '*************************************************************************************' >> .podaci/podaci.txt
+					chmod 0000 .podaci/podaci.txt
 					echo -e ${GREEN}'Lozinke su iskopirane.'${NC}
 				break
 				;;
