@@ -85,6 +85,15 @@ lamp/
 └── README.md
 ```
 
-# Pri konfigurisanju servera skripta će napraviti direktorijum `.podaci` u `root` direktorijumu servera.  
+# Čuvanje podataka
+Pri konfigurisanju servera skripta će napraviti direktorijum `.podaci` u `root` direktorijumu servera (ukoliko tako odaberete u poslednjem koraku).
+
+Unutar foldera `.podaci` biće napravljeni sledeći fajlovi:
+- podaci.txt
+- ssl-info.txt
+
+Fajl `podaci.txt` sadrži sve podatke koje ste uneli na početku instalacije.
+
+Fajl `ssl-info.txt` sadrži podatke o instaliranom SSL sertifikatu (naziv i putanje na serveru)
 
 Licenca: [MIT](LICENSE)
