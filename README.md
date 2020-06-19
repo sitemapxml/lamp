@@ -84,6 +84,16 @@ lamp/
 ├── LICENSE
 └── README.md
 ```
+Repozitorija se sastoji od tri skripte za konfigurisanje i foldera `files` unutar koga se nalaze fajlovi koji se po potrebi kopiraju u toku instalacije.
+
+Namena skripti je sledeća:
+- `lamp` služi za kompletno konfigurisanje servera i instalaciju svih neophodnih programa za rad LAMP steka.
+- `mksite` služi za automatizovano dodavanje novog veb sajta, što obuhvata kreiranje virtual-hostova, instalaciju SSL sertifikata, dodavanje novog korisnika, kreiranje novog webroot-a i po potrebi, instalaciju Wordpress-a.
+- `uninstall` služi za de-instalaciju svih instaliranih komponenti. Ova skripta se koristi samo u svrhe razvoja u slučajevima kada se javlja potreba za ponovnim konfigurisanjem servera.
+
+Namena fajlova unutar foldera `files` je sledeća:
+- `6g.conf` jeste niz pravila apache servera koji se po potrebi može dodati u konfiguracioni fajl bilo kog virtualnog hosta na serveru. Namena ovog fajla jeste blokiranje neželjenih URL zahteva. 6G vatreni zid je pažljivo razvijan dugi niz godina od strane iskusnig php developera i stručnjaka za bezbednost pod imenom `Jeff Star` i veoma dobro testiran i uglavnom radi bez problema kada je u pitanju Apache2/PHP/mysql set tehnologija. Više informacija o 6G vatrenom zidu možete da pročitate na veb sajtu njegovog autora na adresi: [https://perishablepress.com/6g/](https://perishablepress.com/6g/)
+- `index.html` u slučaju da ne želite da instalirate Wordpress `index.html` se pri instalaciji kopira u `webroot` i sadrži linkove do kontrolne table i do `php.info` fajla, koji se koristi za testiranje funkcionalnosti php-a, kao i jednu jednostravnu igricu u css-u, zahvaljujući autoru `Nathan Taylor` iz Tokia - izvor: [https://codepen.io/nathantaylor/pen/KaLvXw](https://codepen.io/nathantaylor/pen/KaLvXw)
 
 # Čuvanje podataka
 Pri konfigurisanju servera skripta će napraviti direktorijum `.podaci` u `root` direktorijumu servera (ukoliko tako odaberete u poslednjem koraku).
