@@ -45,7 +45,7 @@ What would you like to do about menu.lst?
 Odaberite opciju `keep the local version currently installed` i odaberite `<Ok>` ili pritisnite `[Enter]`
 
 # Ulazni parametri
-Na početku instalacije postoji šest upita na koje morate da odgovorite kako bi skripta bila pohranjena potrebmin informacijama i kako bi konfigurisanje moglo automatski da se izvrši. 
+Na početku instalacije postoji šest upita na koje morate da odgovorite kako bi skripta bila pohranjena potrebmin informacijama i kako bi konfigurisanje moglo automatski da se izvrši.
 
  - **Naziv domena (hostname)** - koristi se ekstenzivno pri instalaciji. Prema unetom nazivu hosta kreira se `web root` i `apache virtual host` fajl. Ukoliko odaberete instalaciju Wordpress-a naziv baze podataka će biti dodeljen prema nazivu hosta sa donjom crtom umesto tačke. (npr. `example_com`)
  - **Lozinka root korisnika** - root lozinka servera
@@ -71,7 +71,7 @@ Podrazumevana vrednost promenljive `email` je `webmaster@example.com`
 
 # Struktura projekta
 
-``` 
+```
 lamp/
 ├── files/
 │   ├── 6g.conf
@@ -84,5 +84,7 @@ lamp/
 ├── LICENSE
 └── README.md
 ```
+
+# Pri konfigurisanju servera skripta će napraviti direktorijum `.podaci` u `root` direktorijumu servera.  
 
 Licenca: [MIT](LICENSE)
