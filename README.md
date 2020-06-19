@@ -44,6 +44,8 @@ What would you like to do about menu.lst?
 ```
 Odaberite opciju `keep the local version currently installed` i odaberite `<Ok>` ili pritisnite `[Enter]`
 
+Ukoliko ste odabrali instalaciju Wordpress-a, nakon uspešnog konfigurisanja servera potrebno je dovršiti instalaciju otvaranjem odgovarajuće adrese u vašem pretraživaču i unošenjem podataka za povezivanje sa bazom podataka sačuvanih u fajlu `db-info.txt`
+
 # Ulazni parametri
 Na početku instalacije postoji šest upita na koje morate da odgovorite kako bi skripta bila pohranjena potrebmin informacijama i kako bi konfigurisanje moglo automatski da se izvrši.
 
