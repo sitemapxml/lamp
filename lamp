@@ -306,7 +306,7 @@ while true
 			sleep 1s
 			database_password=`date +%s | sha256sum | base64 | head -c 32`
 			db_name=`echo $hostname | sed 's/\./_/g'`
-			mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+			mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 			echo '==================================================================' > db-info.txt
 			echo '============= Pristupni parametri za bazu podataka ===============' >> db-info.txt
 			echo '==================================================================' >> db-info.txt
