@@ -269,8 +269,6 @@ case $ssl_install in
 	;;
 esac
 
-# CERTFILE="/etc/letsencrypt/live/$hostname/fullchain.pem"
-# KEYFILE="/etc/letsencrypt/live/$hostname/privkey.pem"
 if [ -f "$CERTFILE" ] && [ -f "$KEYFILE" ] && [ "$https" == "true" ]; then
     protocol='https://'
 else
@@ -292,7 +290,6 @@ while true
 			tar -xzvf latest-sr_RS.tar.gz
 			mv wordpress /var/www/$hostname/html
 			chown www-data:www-data -R /var/www/$hostname/html
-			echo -e '\n/* FS Method */\ndefine('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
 
 			# Instaliranje dodatnih php ekstenzija
 			apt-get install php-xmlrpc php-exif -y

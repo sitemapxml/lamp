@@ -99,7 +99,7 @@ while true
 			tar -xzvf latest-sr_RS.tar.gz
 			mv wordpress /var/www/$hostname/html
 			chown www-data:www-data -R /var/www/$hostname/html
-			echo -e '\n/* FS Method */\ndefine('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
+			# echo -e '\n/* FS Method */\ndefine('FS_METHOD','direct');' >> /var/www/$hostname/html/wp-config-sample.php
 
 			# Brisanje nepotrebnih fajlova
 			rm latest-sr_RS.tar.gz
