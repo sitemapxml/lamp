@@ -5,7 +5,7 @@
 # Autor: https://github.com/sitemapxml      #
 # Licenca: MIT                              #
 # Datum prvog objavljivanja: Dec 25, 2019.  #
-# Verzija: 1.0.2                            #
+# Verzija: 1.0.3                            #
 #############################################
 
 # Definicije boja
@@ -35,8 +35,8 @@ text+="┌───────────────────────�
 text+="│ Dobro došli u LAMP skriptu za instalaciju!           │\n"
 text+="│ Sledeći programi će biti instalirani:                │\n"
 text+="│    - apache2 http server                             │\n"
-text+="│    - mysql 8                                         │\n"
-text+="│    - php 7.4                                         │\n"
+text+="│    - mysql - 5.6 ili 8.0 (zavisi od verzije OS-a)    │\n"
+text+="│    - php - 7.2 ili 7.4 (zavisi od verzije OS-a)      │\n"
 text+="│ PHP ekstenzije:                                      │\n"
 text+="│    php-zip php-mysql php-mbstring php-curl           │\n"
 text+="│    php-gd php-xml php-xmlrpc php-soap php-intl       │\n"
@@ -156,12 +156,15 @@ apt-get install php-zip php-mysql php-curl php-mbstring php-bcmath php-gd php-xm
 systemctl enable mysql apache2
 apt-get install zip unzip tree locate net-tools -y
 
+# Provera verzije php-a
+php_version=$( php -r 'echo phpversion();' | head -c 3 )
+
 # Osnovna podešavanja php-a, ServerTokens
 echo -e ${YELLOW}'Konfigurisanje php-a...'${NC}
 sleep 1s
-sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.4/apache2/php.ini
-sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/7.4/apache2/php.ini
-sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/7.4/apache2/php.ini
+sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/$php_version/apache2/php.ini
+sed -i 's/post_max_size = 8M/post_max_size = 280M/g' /etc/php/$php_version/apache2/php.ini
+sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_version/apache2/php.ini
 sed -i 's/ServerTokens OS/ServerTokens Prod/g' /etc/apache2/conf-available/security.conf
 systemctl restart apache2
 
@@ -302,8 +305,8 @@ while true
 			# Kreiranje baze podataka
 			echo 'Kreiranje baze podataka...'
 			sleep 1s
-			database_password=`date +%s | sha256sum | base64 | head -c 32`
-			db_name=`echo $hostname | sed 's/\./_/g'`
+			database_password=$( date +%s | sha256sum | base64 | head -c 32 )
+			db_name=$( echo $hostname | sed 's/\./_/g' )
 			mysql -u root -e "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci; CREATE USER '$unixuser'@'%' IDENTIFIED BY '$database_password'; GRANT ALL PRIVILEGES ON *.* TO '$unixuser'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 			echo '==================================================================' > db-info.txt
 			echo '============= Pristupni parametri za bazu podataka ===============' >> db-info.txt
@@ -492,5 +495,6 @@ case $ssl_install in
 	;;
 esac
 
-# Brisanje bash istorije
+# Brisanje bash i mysql istorije
 cat /dev/null > ~/.bash_history && history -c
+cat /dev/null > ~/.mysql_history
