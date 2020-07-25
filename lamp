@@ -279,9 +279,11 @@ esac
 if [ -f "$CERTFILE" ] && [ -f "$KEYFILE" ] && [ "$https" == "true" ]; then
     protocol='https://'
     webmin_protocol='https'
+    ssl_installed='true'
 else
     protocol='http://'
     webmin_protocol='http'
+    ssl_installed='false'
 fi
 
 url="$protocol$hostname"
@@ -356,8 +358,15 @@ while true
 			cp files/index.html /var/www/$hostname/html/index.html
 			echo "<?php phpinfo(); ?>" > /var/www/$hostname/html/info.php
 			sed -i "s/s_title/Domen $hostname je uspešno podešen\!/g" /var/www/$hostname/html/index.html
+
       sed -i "s/webmin_protocol/$webmin_protocol/g" /var/www/$hostname/html/index.html
-			sed -i "s/webmin_hostname/$hostname/g" /var/www/$hostname/html/index.html
+      ipv4=$( hostname -i | cut -f1 -d' ' )
+      if [ "$ssl_installed" = "true" ]; then
+        sed -i "s/webmin_hostname/$hostname/g" /var/www/$hostname/html/index.html
+      else
+        sed -i "s/webmin_hostname/$ipv4/g" /var/www/$hostname/html/index.html
+      fi
+
 			echo 'Podešeni su index.html i phpinfo fajl.'
 		break
 		;;
