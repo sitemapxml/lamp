@@ -171,6 +171,9 @@ sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 256M/g' /etc/php/$php_v
 sed -i 's/ServerTokens OS/ServerTokens Prod/g' /etc/apache2/conf-available/security.conf
 systemctl restart apache2
 
+# Podešavanje hostname-a prema unetom domenu
+hostnamectl set-hostname $hostname
+
 # Webmin instalacija
 echo -e ${YELLOW}'Instaliranje Webmin kontrolne table...'${NC}
 sleep 1s
@@ -208,9 +211,6 @@ echo -e ${YELLOW}'Postavljanje nove lozinke za root...'${NC}
 sleep 1s
 echo -e "root:$rootpass" | chpasswd
 echo -e ${GREEN}'Lozinka je ažurirana!'${NC}
-
-# Podešavanje hostname-a prema unetom domenu
-hostnamectl set-hostname $hostname
 
 # Kreiranje direktorijuma za skladištenje lozinki
 mkdir .podaci
