@@ -337,7 +337,7 @@ while true
 						[dD][aA]|[dD])
 							# Instaliranje faljova
 							echo 'Konfiguriše se Multisite...'
-							echo -e '\n/* Multisite */\ndefine( 'WP_ALLOW_MULTISITE', true );' >> /var/www/$hostname/html/wp-config-sample.php
+							sed -i "81i define( 'WP_ALLOW_MULTISITE', true );" /var/www/$hostname/html/wp-config-sample.php
 							echo -e ${GREEN}'Multisite je podešen!'${NC}
 						break
 						;;
