@@ -140,7 +140,7 @@ apt-get update
 # Dodavanje main repozitorije za slučaj da nije dodata, dodavanje universe repozitorije
 echo -e ${YELLOW}'Dodavanje repozitorija...'${NC}
 add-apt-repository main
-add-apt-repository universe
+# add-apt-repository universe
 apt-get update
 
 # Instalacija software-properties-common za slučaj da nije instalirano
