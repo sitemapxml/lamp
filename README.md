@@ -76,13 +76,14 @@ Podrazumevana vrednost promenljive `email` je `webmaster@example.com`
 ```
 lamp/
 ├── files/
-│   ├── 6g.conf
-│   ├── index.html
-│   ├── jcameron-key.asc
-│   └── vhost.conf
+│   │ └── resources/
+│   │      ├── 6g.conf
+│   │      ├── index.html
+│   │      ├── jcameron-key.asc
+│   │      └── vhost.conf
+│   ├── mksite
+│   └── uninstall
 ├── lamp
-├── mksite
-├── uninstall
 ├── LICENSE
 └── README.md
 ```
