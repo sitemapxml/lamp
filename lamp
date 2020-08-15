@@ -26,7 +26,7 @@ BGRAY='\e[47m'
 BNC='\e[49m'
 
 # Davanje privilegija za pokretanje ostalim skriptama
-chmod +x mksite uninstall
+chmod +x files/mksite files/uninstall
 
 # Poruka dobrodošlice!
 text=''
